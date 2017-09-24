@@ -31,26 +31,18 @@ def run(screen,clock,size):
 	sfx_group = pygame.sprite.LayeredDirty() #Group for sfx objects
 	all_sprites = pygame.sprite.LayeredDirty() #Group for all objects
 
-	ship = Ship(loc=(125, 200))
+	ship = Ship(loc=((settings.size[0] / 2)-50,(settings.size[1] - 150)))
 	all_sprites.add(ship)
 
-	alien1 = Alien(loc=(50, 50), sway=50)
-	alien2 = Alien(loc=(125, 50), sway=50)
-	alien3 = Alien(loc=(200, 50), sway=50)
-	alien4 = Alien(loc=(50, 10), sway=50)
-	alien5 = Alien(loc=(125, 10), sway=50)
-	alien6 = Alien(loc=(200, 10), sway=50)	
-	alien_group.add(alien1)
-	alien_group.add(alien2)
-	alien_group.add(alien3)
-	alien_group.add(alien4)
-	alien_group.add(alien5)
-	alien_group.add(alien6)
+	for i in range(1,5):
+		for f in range(1,10):
+			alien = Alien(loc=(5 + (f*42), 50 * i), sway=50)
+			alien_group.add(alien)
 
 	for alien in alien_group:
 		all_sprites.add(alien)
 
-	fire = Sfx('fire.png', loc=(20,268), speed=100, loop=1, size=(32,32))
+	fire = Sfx('fire.png', loc=(20,settings.size[1]-32), speed=100, loop=1, size=(32,32))
 	sfx_group.add(fire)
 	all_sprites.add(fire)
 
