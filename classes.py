@@ -21,7 +21,7 @@ def spriteImages(spritesheet, size):
 	# spritesheet. Takes a string with the image to load and a
 	# tuple with the size of the images to be returned
 
-	sheet = pygame.image.load(IMAGES_SOURCE+spritesheet).convert()
+	sheet = pygame.image.load(IMAGES_SOURCE+spritesheet).convert_alpha()
 	sheet_size = sheet.get_size()
 	columns = int(sheet_size[0] / size[0])
 	rows = int(sheet_size[1] / size[1])
@@ -150,7 +150,7 @@ class Ship(pygame.sprite.DirtySprite):
 		self.speedx = self.speed_right - self.speed_left
 		if (self.speedx + self.rect.left) <= 0 or (self.speedx + self.rect.right) >= settings.size[1]:
 			self.speedx = 0
-		self.rect = self.rect.move(self.speedx,0)
+		self.rect.x = self.rect.x + self.speedx
 		self.dirty = 1
 
 	def action(self, event):
@@ -182,16 +182,30 @@ class Bullet(pygame.sprite.DirtySprite):
 
 	def __init__(self, loc=(0,0)):
 		super().__init__()
-		self.image = pygame.image.load(IMAGES_SOURCE+'bullet.png')
+		#self.image = pygame.image.load(IMAGES_SOURCE+'bullet.png')
+		self.image = pygame.Surface((16,16))
+		self.image.set_alpha(100)
 		self.rect = self.image.get_rect()
 		self.rect.centerx = loc[0]
 		self.rect.centery = loc[1]
+		self.anim = Sfx('bullet_sheet.png', parent_rect=self.rect, speed=100, loop=1, size=(16,16))
+
 
 	def move(self):
-		self.rect = self.rect.move(0,Bullet.speed)
+		self.rect.y = self.rect.y + Bullet.speed
+		#self.anim.rect = self.rect
 		if self.rect.y < -self.rect.height: #Dissapear if it hits the top of the screen
+			self.anim.kill()
 			self.kill()
 		self.dirty = 1
+
+	def kill(self):
+		self.anim.kill()
+		super().kill()
+
+	# def draw(self):
+	# 	super.draw()
+	# 	self.anim.draw()
 
 class Alien(pygame.sprite.DirtySprite):
 
@@ -214,7 +228,7 @@ class Alien(pygame.sprite.DirtySprite):
 		self.sway = sway
 
 	def move(self):
-		self.rect = self.rect.move(self.speed, 0)
+		self.rect.x = self.rect.x + self.speed
 		if self.rect.left > (self.pivot + self.sway) or self.rect.left < (self.pivot - self.sway):
 			self.speed = -self.speed
 			self.rect = self.rect.move(0, 5)

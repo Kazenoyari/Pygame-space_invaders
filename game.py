@@ -78,7 +78,9 @@ def run(screen,clock,size):
 			    	reaction = ship.action(event)
 			    	if type(reaction) is Bullet:
 			    		bullet_group.add(reaction)
+			    		sfx_group.add(reaction.anim)
 			    		all_sprites.add(reaction)
+			    		all_sprites.add(reaction.anim)
 
 		if not pause and not exit_pause:
 			ship.move()
