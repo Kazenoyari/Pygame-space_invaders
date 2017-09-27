@@ -42,10 +42,6 @@ def run(screen,clock,size):
 	for alien in alien_group:
 		all_sprites.add(alien)
 
-	fire = Sfx('fire.png', loc=(20,settings.size[1]-32), speed=100, loop=1, size=(32,32))
-	sfx_group.add(fire)
-	all_sprites.add(fire)
-
 
 	#Bacground for dirty rectangle clear function
 
@@ -107,7 +103,6 @@ def run(screen,clock,size):
 			pause_snapshot.blit(display_screen,(0,0), area=pause_rect) 
 
 
-		fire.anim()
 		all_sprites.clear(screen, background) #clear all the sprites to draw them again
 		dirtyRects = all_sprites.draw(screen) #Save all the rects of the sprites that need redrawing
 		if pause: #Draws the pause menu
