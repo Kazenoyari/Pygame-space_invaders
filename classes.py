@@ -34,7 +34,7 @@ def spriteImages(spritesheet, size):
 			image_rect.x = (size[0] * column)
 			image = pygame.Surface(size)
 			image.blit(sheet,(0,0),area=image_rect)
-			images.append(image)
+			images.append(image.convert_alpha())
 		image_rect.x = 0
 		
 	return images
@@ -89,9 +89,12 @@ class Sfx(pygame.sprite.DirtySprite):
 	#		  if 0, the object will be killed after running.
 	#	size: tuple with size of the sfx, Default:(8,8)
 
-	def __init__(self, sprite_image, loc=(0,0), parent_rect=None, speed=10, loop=0, size=(8,8)):
+	def __init__(self, sprite_image, loc=(0,0), parent_rect=None, speed=10, loop=0, size=(8,8), rot=0):
 		super().__init__()
 		self.images = spriteImages(sprite_image, size)
+		if rot != 0:
+			for i in range(0,len(self.images)):
+				 self.images[i] = pygame.transform.rotate(self.images[i],rot)
 		self.image = self.images[0]
 		if parent_rect == None:
 			self.rect = self.image.get_rect()
@@ -223,24 +226,42 @@ class Alien(pygame.sprite.DirtySprite):
 	# 	locy: y cordinate for the topleft corner
 	# 	sway: amount of pixels the alien moves to the left and the right
 
+
 	def __init__(self, loc=(0,0), sway=0):
 		super().__init__()
-		self.image = pygame.image.load(IMAGES_SOURCE+'alien.png')
+		#self.image = pygame.image.load(IMAGES_SOURCE+'alien.png')
+		self.frame = 0
+		self.images =  spriteImages('alien_sheet.png',(25,24))
+		self.image = self.images[self.frame]
 		self.rect = self.image.get_rect()
 		self.rect.x = loc[0]
 		self.rect.y = loc[1]
 
-		self.speed = 1
+		self.speed = 6
 		self.health = 1
 		self.pivot = self.rect.centerx #Center of the origin of the aline. Pivot for the swaying movement
 		self.sway = sway
+		self.last_move = pygame.time.get_ticks()
 
 	def move(self):
-		self.rect.x = self.rect.x + self.speed
-		if self.rect.left > (self.pivot + self.sway) or self.rect.left < (self.pivot - self.sway):
-			self.speed = -self.speed
-			self.rect = self.rect.move(0, 5)
-		self.dirty = 1
+		now = pygame.time.get_ticks()
+		if (now - self.last_move) >= 600:
+			self.last_move = pygame.time.get_ticks()
+			self.rect.x = self.rect.x + self.speed
+			if self.rect.left > (self.pivot + self.sway) or self.rect.left < (self.pivot - self.sway):
+				self.speed = -self.speed
+				self.rect.y = self.rect.y + 6
+			if self.frame == len(self.images)-1:
+				self.frame = 0
+			else:
+				self.frame = self.frame + 1
+			self.image = self.images[self.frame]
+			self.dirty = 1
+
+	def shoot(self):
+		if random.randint(0, 5000) > 4999:
+			bullet = Bullet(0,(self.rect.centerx, self.rect.centery + (self.rect.height/2 + 10)))
+			return bullet
 
 	def checkHit(self, bullet_group):
 		if pygame.sprite.spritecollide(self, bullet_group, True): #Kill it if it collides with  bullet
