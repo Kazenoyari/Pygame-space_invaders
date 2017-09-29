@@ -4,12 +4,13 @@
 #
 #///////////////////////////////////////////////////////////
 
-import sys, pygame, settings
+import sys, pygame, settings, random
 import menu
 import game
 
 
 pygame.init()
+random.seed()
 
 screen = pygame.display.set_mode(settings.size) #Create screen and window
 pygame.display.set_caption("Space Invaders") #Set window title

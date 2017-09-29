@@ -5,7 +5,7 @@
 #
 #///////////////////////////////////////////////////////////
 
-import pygame, color, settings
+import pygame, color, settings, random
 
 # alien_group = pygame.sprite.Group() #Group for alien objects
 # bullet_group = pygame.sprite.Group() #Group for bullet objects
@@ -160,7 +160,7 @@ class Ship(pygame.sprite.DirtySprite):
 			if event.key == pygame.K_LEFT:
 				self.speed_left = 2
 			if event.key == pygame.K_SPACE:
-				bullet = Bullet((self.rect.centerx, self.rect.centery - (self.rect.height/2)))
+				bullet = Bullet(1,(self.rect.centerx, self.rect.centery - (self.rect.height/2 + 10)))
 				return bullet
 
 		if event.type == pygame.KEYUP:
@@ -180,21 +180,29 @@ class Bullet(pygame.sprite.DirtySprite):
 	speed = -5 #Global variable for bullet speed
 	damage = 1 #Global variable for bullet damage
 
-	def __init__(self, loc=(0,0)):
+	def __init__(self,direction, loc=(0,0)):
 		super().__init__()
 		#self.image = pygame.image.load(IMAGES_SOURCE+'bullet.png')
+		self.direction = direction
+		if direction >= 1:
+			self.speed = Bullet.speed
+			rot = 0
+		else:
+			self.speed = -Bullet.speed
+			rot = 180
+		self.origin = None
 		self.image = pygame.Surface((16,16))
 		self.image.set_alpha(100)
 		self.rect = self.image.get_rect()
 		self.rect.centerx = loc[0]
 		self.rect.centery = loc[1]
-		self.anim = Sfx('bullet_sheet.png', parent_rect=self.rect, speed=100, loop=1, size=(16,16))
+		self.anim = Sfx('bullet_sheet.png', parent_rect=self.rect, speed=100, loop=1, size=(16,16), rot=rot)
 
 
 	def move(self):
-		self.rect.y = self.rect.y + Bullet.speed
+		self.rect.y = self.rect.y + self.speed
 		#self.anim.rect = self.rect
-		if self.rect.y < -self.rect.height: #Dissapear if it hits the top of the screen
+		if (self.rect.y < -self.rect.height) or (self.rect.y > 640): #Dissapear if it hits the top of the screen
 			self.anim.kill()
 			self.kill()
 		self.dirty = 1

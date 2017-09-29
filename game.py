@@ -27,7 +27,8 @@ def run(screen,clock,size):
 	#Creation of game objects
 
 	alien_group = pygame.sprite.Group() #Group for alien objects
-	bullet_group = pygame.sprite.Group() #Group for bullet objects
+	player_bullets = pygame.sprite.Group() #Group for bullet objects
+	alien_bullets = pygame.sprite.Group()
 	sfx_group = pygame.sprite.LayeredDirty() #Group for sfx objects
 	all_sprites = pygame.sprite.LayeredDirty() #Group for all objects
 
@@ -73,19 +74,30 @@ def run(screen,clock,size):
 		    				start_pause = True			
 			    	reaction = ship.action(event)
 			    	if type(reaction) is Bullet:
-			    		bullet_group.add(reaction)
-			    		sfx_group.add(reaction.anim)
-			    		all_sprites.add(reaction)
-			    		all_sprites.add(reaction.anim)
+			    		if len(player_bullets.sprites()):
+			    			reaction.kill()
+			    		else:
+				    		player_bullets.add(reaction)
+				    		sfx_group.add(reaction.anim)
+				    		all_sprites.add(reaction)
+				    		all_sprites.add(reaction.anim)
 
 		if not pause and not exit_pause:
 			ship.move()
-			for bullet in bullet_group.sprites(): # Update position of all bullets
+			for bullet in player_bullets.sprites(): # Update position of all bullets
+				bullet.move()
+			for bullet in alien_bullets.sprites(): # Update position of all bullets
 				bullet.move()
 			for alien in alien_group.sprites(): # Update position for all alines and check if the hit a bullet
 				alien.move()
-				alien.checkHit(bullet_group)
-				if alien.rect.centery > (settings.size[1] - 50) or alien.rect.colliderect(ship.rect):
+				shoot = alien.shoot()
+				if type(shoot) is Bullet:
+				    		alien_bullets.add(shoot)
+				    		sfx_group.add(shoot.anim)
+				    		all_sprites.add(shoot)
+				    		all_sprites.add(shoot.anim)
+				alien.checkHit(player_bullets)
+				if alien.rect.centery > (settings.size[1] - 50) or alien.rect.colliderect(ship.rect) or  pygame.sprite.spritecollide(ship, alien_bullets, True):
 					#If any alien gets to the bottomb of the screen or collides with the player ship,
 					#stop the game loop and return 0 (loose)
 					loop = False			
