@@ -268,6 +268,31 @@ class Alien(pygame.sprite.DirtySprite):
 			self.kill()
 
 
+class Shield(pygame.sprite.DirtySprite):
+
+	def __init__(self, loc=(0,0)):
+		super().__init__()
+		self.health = 5
+		self.frame = 0
+		self.images =  spriteImages('shield_sheet.png',(25,25))
+		self.image = self.images[self.frame]
+		#self.image = pygame.Surface((25,25))
+		#self.image.fill(color.WHITE)
+		self.rect = self.image.get_rect()
+		self.rect.x = loc[0]
+		self.rect.y = loc[1]
+
+	def checkHit(self, bullet_group):
+		if pygame.sprite.spritecollide(self, bullet_group, True): #Kill it if it collides with  bullet
+			self.health -= 1
+			if not (self.health):
+				self.kill()
+			else:
+				self.frame += 1
+				self.image = self.images[self.frame]
+				self.dirty = 1
+
+
 ############# NOTES ##############################################
 
 # Blit(source,dest,area=rect)

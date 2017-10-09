@@ -44,6 +44,10 @@ def run(screen,clock,size):
 		all_sprites.add(alien)
 
 
+	block1 = Shield(loc=((settings.size[0] / 2)-50,(settings.size[1] - 300)))
+	all_sprites.add(block1)
+
+
 	#Bacground for dirty rectangle clear function
 
 	background = pygame.Surface(screen.get_size())
@@ -84,10 +88,14 @@ def run(screen,clock,size):
 
 		if not pause and not exit_pause:
 			ship.move()
-			for bullet in player_bullets.sprites(): # Update position of all bullets
+			for bullet in player_bullets.sprites(): # Update position of all player bullets
 				bullet.move()
-			for bullet in alien_bullets.sprites(): # Update position of all bullets
+			for bullet in alien_bullets.sprites(): # Update position of all enemy bullets
 				bullet.move()
+			for block in all_sprites.sprites():
+				if type(block) is Shield:
+					block.checkHit(player_bullets)
+					block.checkHit(alien_bullets)
 			for alien in alien_group.sprites(): # Update position for all alines and check if the hit a bullet
 				alien.move()
 				shoot = alien.shoot()
