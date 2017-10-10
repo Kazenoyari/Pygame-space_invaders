@@ -43,10 +43,9 @@ def run(screen,clock,size):
 	for alien in alien_group:
 		all_sprites.add(alien)
 
-
-	block1 = Shield(loc=((settings.size[0] / 2)-50,(settings.size[1] - 300)))
-	all_sprites.add(block1)
-
+	Shield.createShield(all_sprites,loc=(25,(settings.size[1] - 250)))
+	Shield.createShield(all_sprites,loc=((settings.size[0] / 2)-75,(settings.size[1] - 250)))
+	Shield.createShield(all_sprites,loc=(settings.size[0]-175,(settings.size[1] - 250)))
 
 	#Bacground for dirty rectangle clear function
 
