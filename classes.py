@@ -270,14 +270,22 @@ class Alien(pygame.sprite.DirtySprite):
 
 class Shield(pygame.sprite.DirtySprite):
 
-	def __init__(self, loc=(0,0)):
+	def __init__(self, loc=(0,0), corner=None):
 		super().__init__()
 		self.health = 5
-		self.frame = 0
 		self.images =  spriteImages('shield_sheet.png',(25,25))
-		self.image = self.images[self.frame]
 		#self.image = pygame.Surface((25,25))
 		#self.image.fill(color.WHITE)
+
+		if corner != None:
+			self.frame = 5
+			if corner == 'right':
+				for i in range(0,len(self.images)):
+					self.images[i] = pygame.transform.flip(self.images[i],1,0)
+		else:
+			self.frame = 0
+
+		self.image = self.images[self.frame]
 		self.rect = self.image.get_rect()
 		self.rect.x = loc[0]
 		self.rect.y = loc[1]
@@ -291,6 +299,14 @@ class Shield(pygame.sprite.DirtySprite):
 				self.frame += 1
 				self.image = self.images[self.frame]
 				self.dirty = 1
+
+	def createShield(group,loc=(0,0)):
+		group.add(Shield(loc=(loc[0] + (25),loc[1]), corner="left"))
+		group.add(Shield(loc=(loc[0] + (25*2),loc[1])))
+		group.add(Shield(loc=(loc[0] + (25*3),loc[1])))
+		group.add(Shield(loc=(loc[0] + (25*4),loc[1]), corner="right"))
+		group.add(Shield(loc=(loc[0] + (25),loc[1]+25)))
+		group.add(Shield(loc=(loc[0] + (25*4),loc[1]+25)))
 
 
 ############# NOTES ##############################################
