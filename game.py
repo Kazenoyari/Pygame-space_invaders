@@ -12,6 +12,16 @@
 import sys, pygame, color, settings
 from classes import *
 
+
+def newLevel(level,alien_group,sprite_group):
+	for i in range(1,5):
+		for f in range(1,10):
+			alien = Alien(loc=(5 + (f*42), (50 * i)+(20 * (level-1))), sway=50)
+			alien_group.add(alien)
+
+	for alien in alien_group:
+		sprite_group.add(alien)
+
 def run(screen,clock,size):
 
 	#Flag for running the game. Set to 0 or False to end the game
@@ -20,6 +30,8 @@ def run(screen,clock,size):
 	pause = False
 	exit_pause = False
 	start_pause = False
+
+	level = 1
 
 	pause_snapshot = pygame.Surface((128,128))
 	pause_image = pygame.image.load("images/pause.png").convert_alpha()
@@ -35,17 +47,12 @@ def run(screen,clock,size):
 	ship = Ship(loc=((settings.size[0] / 2)-50,(settings.size[1] - 150)))
 	all_sprites.add(ship)
 
-	for i in range(1,5):
-		for f in range(1,10):
-			alien = Alien(loc=(5 + (f*42), 50 * i), sway=50)
-			alien_group.add(alien)
-
-	for alien in alien_group:
-		all_sprites.add(alien)
 
 	Shield.createShield(all_sprites,loc=(25,(settings.size[1] - 250)))
 	Shield.createShield(all_sprites,loc=((settings.size[0] / 2)-75,(settings.size[1] - 250)))
 	Shield.createShield(all_sprites,loc=(settings.size[0]-175,(settings.size[1] - 250)))
+	
+	newLevel(level, alien_group, all_sprites)
 
 	#Bacground for dirty rectangle clear function
 
@@ -110,10 +117,14 @@ def run(screen,clock,size):
 					loop = False			
 					return 0
 
-			if not alien_group.sprites():
-				#If there are no more aliens, stop the game loop and return 1 (win)
-				loop = False		
-				return 1
+			if not alien_group.sprites(): #If there are no more aliens
+				level += 1
+				if level > 10:
+					#If reached level 10, stop the game loop and return 1 (win)
+					loop = False		
+					return 1
+				else:
+					newLevel(level, alien_group, all_sprites)
 
 		if start_pause: #Saves the state of the screen affected by the pause menu before pausing
 			pause_rect = pause_image.get_rect()
