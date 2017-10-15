@@ -32,6 +32,7 @@ def run(screen,clock,size):
 	start_pause = False
 
 	level = 1
+	score = 0
 
 	pause_snapshot = pygame.Surface((128,128))
 	pause_image = pygame.image.load("images/pause.png").convert_alpha()
@@ -58,8 +59,10 @@ def run(screen,clock,size):
 	background = background.convert()
 	background.fill((0, 0, 0))
 
-	levelText = TextSprite('Level ' + str(level), loc=(settings.size[0]/2, 25))
+	levelText = TextSprite('Level ' + str(level), loc=(settings.size[0]/2, 25), centered=True)
 	all_sprites.add(levelText)
+	scoreText = TextSprite('Score: ' + str(score), loc=(25, 17))
+	all_sprites.add(scoreText)
 
 	newLevel(level, alien_group, all_sprites)
 
@@ -104,11 +107,13 @@ def run(screen,clock,size):
 				alien.move()
 				shoot = alien.shoot()
 				if type(shoot) is Bullet:
-				    		alien_bullets.add(shoot)
-				    		sfx_group.add(shoot.anim)
-				    		all_sprites.add(shoot)
-				    		all_sprites.add(shoot.anim)
-				alien.checkHit(player_bullets)
+					alien_bullets.add(shoot)
+					sfx_group.add(shoot.anim)
+					all_sprites.add(shoot)
+					all_sprites.add(shoot.anim)
+				if alien.checkHit(player_bullets):
+					score += 10
+					scoreText.changeText('Score: ' + str(score))
 				if alien.rect.centery > (settings.size[1] - 50) or alien.rect.colliderect(ship.rect) or  pygame.sprite.spritecollide(ship, alien_bullets, True):
 					#If any alien gets to the bottomb of the screen or collides with the player ship,
 					#stop the game loop and return 0 (loose)
