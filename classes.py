@@ -266,6 +266,9 @@ class Alien(pygame.sprite.DirtySprite):
 	def checkHit(self, bullet_group):
 		if pygame.sprite.spritecollide(self, bullet_group, True): #Kill it if it collides with  bullet
 			self.kill()
+			return True
+		else:
+			return False
 
 
 class Shield(pygame.sprite.DirtySprite):
@@ -312,7 +315,7 @@ class Shield(pygame.sprite.DirtySprite):
 
 class TextSprite(pygame.sprite.DirtySprite): #Class for creating text with sprite characteristics
 
-	def __init__(self,text, loc=(0,0),fontSize=25,color=(255,255,255)):
+	def __init__(self,text, loc=(0,0), centered=False,fontSize=25,color=(255,255,255)):
 		super().__init__()
 		self.font = pygame.font.Font(None, fontSize)
 		self.fontSize = fontSize
@@ -320,7 +323,11 @@ class TextSprite(pygame.sprite.DirtySprite): #Class for creating text with sprit
 		self.color = color
 		self.image = self.font.render(text,0,color)
 		self.loc = loc
-		self.rect = self.image.get_rect(center=loc)
+		self.centered = centered
+		if centered:
+			self.rect = self.image.get_rect(center=loc)
+		else:
+			self.rect = self.image.get_rect(topleft=loc)
 
 	def changeFont(self, font):
 		self.font = pygame.font.Font(font, self.fontSize);
@@ -341,7 +348,10 @@ class TextSprite(pygame.sprite.DirtySprite): #Class for creating text with sprit
 
 	def recalculate(self):
 		self.image = self.font.render(self.text,0,self.color)
-		self.rect = self.image.get_rect(center=(self.loc))
+		if self.centered:
+			self.rect = self.image.get_rect(center=self.loc)
+		else:
+			self.rect = self.image.get_rect(topleft=self.loc)
 		self.dirty = 1
 
 
