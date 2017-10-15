@@ -309,6 +309,43 @@ class Shield(pygame.sprite.DirtySprite):
 		group.add(Shield(loc=(loc[0] + (25*4),loc[1]+25)))
 
 
+
+class TextSprite(pygame.sprite.DirtySprite): #Class for creating text with sprite characteristics
+
+	def __init__(self,text, loc=(0,0),fontSize=25,color=(255,255,255)):
+		super().__init__()
+		self.font = pygame.font.Font(None, fontSize)
+		self.fontSize = fontSize
+		self.text = text
+		self.color = color
+		self.image = self.font.render(text,0,color)
+		self.loc = loc
+		self.rect = self.image.get_rect(center=loc)
+
+	def changeFont(self, font):
+		self.font = pygame.font.Font(font, self.fontSize);
+		self.recalculate()
+
+	def changeSize(self, newSize):
+		self.font.size(newSize)
+		self.recalculate()
+
+	def changeText(self, text):
+		self.text = text
+		self.recalculate()
+
+	def changeColor(self, color):
+		self.color = color
+		self.image = self.font.render(self.text,0,color)
+		self.dirty = 1
+
+	def recalculate(self):
+		self.image = self.font.render(self.text,0,self.color)
+		self.rect = self.image.get_rect(center=(self.loc))
+		self.dirty = 1
+
+
+
 ############# NOTES ##############################################
 
 # Blit(source,dest,area=rect)
