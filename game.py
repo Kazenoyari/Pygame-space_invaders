@@ -52,18 +52,16 @@ def run(screen,clock,size):
 	Shield.createShield(all_sprites,loc=((settings.size[0] / 2)-75,(settings.size[1] - 250)))
 	Shield.createShield(all_sprites,loc=(settings.size[0]-175,(settings.size[1] - 250)))
 	
-	newLevel(level, alien_group, all_sprites)
-
 	#Bacground for dirty rectangle clear function
 
 	background = pygame.Surface(screen.get_size())
 	background = background.convert()
 	background.fill((0, 0, 0))
 
-	#Clean the screen
+	levelText = TextSprite('Level ' + str(level), loc=(settings.size[0]/2, 25))
+	all_sprites.add(levelText)
 
-	screen.fill(color.BLACK)
-	pygame.display.flip()
+	newLevel(level, alien_group, all_sprites)
 
 	#Main game loop
 
@@ -125,6 +123,7 @@ def run(screen,clock,size):
 					return 1
 				else:
 					newLevel(level, alien_group, all_sprites)
+					levelText.changeText('Level ' + str(level))
 
 		if start_pause: #Saves the state of the screen affected by the pause menu before pausing
 			pause_rect = pause_image.get_rect()
