@@ -42,6 +42,7 @@ def run(screen,clock,size):
 	alien_group = pygame.sprite.Group() #Group for alien objects
 	player_bullets = pygame.sprite.Group() #Group for bullet objects
 	alien_bullets = pygame.sprite.Group()
+	shield_group = pygame.sprite.Group()
 	sfx_group = pygame.sprite.LayeredDirty() #Group for sfx objects
 	all_sprites = pygame.sprite.LayeredDirty() #Group for all objects
 
@@ -49,9 +50,11 @@ def run(screen,clock,size):
 	all_sprites.add(ship)
 
 
-	Shield.createShield(all_sprites,loc=(25,(settings.size[1] - 250)))
-	Shield.createShield(all_sprites,loc=((settings.size[0] / 2)-75,(settings.size[1] - 250)))
-	Shield.createShield(all_sprites,loc=(settings.size[0]-175,(settings.size[1] - 250)))
+	Shield.createShield(shield_group,loc=(25,(settings.size[1] - 250)))
+	Shield.createShield(shield_group,loc=((settings.size[0] / 2)-75,(settings.size[1] - 250)))
+	Shield.createShield(shield_group,loc=(settings.size[0]-175,(settings.size[1] - 250)))
+	for shield in shield_group:
+		all_sprites.add(shield)
 	
 	#Bacground for dirty rectangle clear function
 
@@ -114,6 +117,7 @@ def run(screen,clock,size):
 				if alien.checkHit(player_bullets):
 					score += 10
 					scoreText.changeText('Score: ' + str(score))
+				alien.checkHit(shield_group):
 				if alien.rect.centery > (settings.size[1] - 50) or alien.rect.colliderect(ship.rect) or  pygame.sprite.spritecollide(ship, alien_bullets, True):
 					#If any alien gets to the bottomb of the screen or collides with the player ship,
 					#stop the game loop and return 0 (loose)

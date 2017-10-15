@@ -263,8 +263,8 @@ class Alien(pygame.sprite.DirtySprite):
 			bullet = Bullet(0,(self.rect.centerx, self.rect.centery + (self.rect.height/2 + 10)))
 			return bullet
 
-	def checkHit(self, bullet_group):
-		if pygame.sprite.spritecollide(self, bullet_group, True): #Kill it if it collides with  bullet
+	def checkHit(self, collide_group):
+		if pygame.sprite.spritecollide(self, collide_group, True): #Kill it if it collides with  bullet
 			self.kill()
 			return True
 		else:
