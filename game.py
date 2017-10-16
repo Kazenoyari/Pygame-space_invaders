@@ -117,19 +117,19 @@ def run(screen,clock,size):
 				if alien.checkHit(player_bullets):
 					score += 10
 					scoreText.changeText('Score: ' + str(score))
-				alien.checkHit(shield_group):
+				alien.checkHit(shield_group)
 				if alien.rect.centery > (settings.size[1] - 50) or alien.rect.colliderect(ship.rect) or  pygame.sprite.spritecollide(ship, alien_bullets, True):
 					#If any alien gets to the bottomb of the screen or collides with the player ship,
 					#stop the game loop and return 0 (loose)
 					loop = False			
-					return 0
+					return score
 
 			if not alien_group.sprites(): #If there are no more aliens
 				level += 1
 				if level > 10:
 					#If reached level 10, stop the game loop and return 1 (win)
 					loop = False		
-					return 1
+					return score
 				else:
 					newLevel(level, alien_group, all_sprites)
 					levelText.changeText('Level ' + str(level))

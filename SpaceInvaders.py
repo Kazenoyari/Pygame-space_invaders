@@ -20,5 +20,5 @@ result = [0] #Result of the game. 0=loose, 1=win
 
 while 1:
 	menu.mainMenu(screen,clock,settings.size)
-	result = game.run(screen,clock,settings.size)
-	menu.gameOver(screen,clock,settings.size,result)
+	score = game.run(screen,clock,settings.size)
+	menu.gameOver(screen,clock,settings.size,score)
