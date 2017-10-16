@@ -25,7 +25,7 @@ def returnMenu():
 	loop = False
 
 # Function used for the drawing loop of the menu
-def menuLoop(screen,clock,option_list,title=None,titleRect=None):
+def menuLoop(screen,clock,option_list,title=None,titleRect=None,subTitle=None,subTitleRect=None):
 
 	all_sprites = pygame.sprite.LayeredDirty()
 	for button in option_list:
@@ -48,6 +48,9 @@ def menuLoop(screen,clock,option_list,title=None,titleRect=None):
 	#Draw the menu title on the background
 	if (title != None) and (titleRect != None):
 		background.blit(title,(titleRect.x,titleRect.y))
+
+	if (subTitle != None) and (subTitleRect != None):
+		background.blit(subTitle,(subTitleRect.x,subTitleRect.y))
 
 	#Clean the screen
 	screen.fill(color.BLACK)
@@ -101,7 +104,7 @@ def mainMenu(screen,clock,size):
 
 	menuLoop(screen,clock,option_list,title=title,titleRect=titleRect)
 
-def gameOver(screen, clock, size, result):
+def gameOver(screen, clock, size, score):
 
 	global loop
 	loop = True
@@ -113,14 +116,12 @@ def gameOver(screen, clock, size, result):
 	option_list.append(returnButton)
 	option_list.append(quitButton)
 
-
-	if result == 1:
-		text = 'You Win!'
-	else:
-		text = 'You Loose!'
-
 	titleText = pygame.font.Font(None, 50)
-	title = titleText.render(text,0,color.WHITE)
+	title = titleText.render('Game Over',0,color.WHITE)
 	titleRect = title.get_rect(center=(size[0]/2,25))
 
-	menuLoop(screen,clock,option_list,title=title,titleRect=titleRect)
+	scoreText = pygame.font.Font(None, 30)
+	playerScore = scoreText.render('Your score: ' + str(score),0,color.WHITE)
+	scoreRect = playerScore.get_rect(center=(size[0]/2,75))
+
+	menuLoop(screen,clock,option_list,title=title,titleRect=titleRect,subTitle=playerScore ,subTitleRect=scoreRect)
