@@ -137,8 +137,7 @@ class Ship(pygame.sprite.DirtySprite):
 
 	def __init__(self, loc=(0,0)):
 		super().__init__()
-		self.image_list = spriteImages('ship_sheet.png', (32,32))
-		self.image = self.image_list[0]
+		self.image = pygame.image.load(IMAGES_SOURCE+"ship.png").convert_alpha()
 		self.rect = self.image.get_rect()
 		self.rect.x = loc[0]
 		self.rect.y = loc[1]
@@ -185,7 +184,6 @@ class Bullet(pygame.sprite.DirtySprite):
 
 	def __init__(self,direction, loc=(0,0)):
 		super().__init__()
-		#self.image = pygame.image.load(IMAGES_SOURCE+'bullet.png')
 		self.direction = direction
 		if direction >= 1:
 			self.speed = Bullet.speed
@@ -204,7 +202,6 @@ class Bullet(pygame.sprite.DirtySprite):
 
 	def move(self):
 		self.rect.y = self.rect.y + self.speed
-		#self.anim.rect = self.rect
 		if (self.rect.y < -self.rect.height) or (self.rect.y > 640): #Dissapear if it hits the top of the screen
 			self.anim.kill()
 			self.kill()
@@ -230,7 +227,6 @@ class Alien(pygame.sprite.DirtySprite):
 
 	def __init__(self, loc=(0,0), sway=0):
 		super().__init__()
-		#self.image = pygame.image.load(IMAGES_SOURCE+'alien.png')
 		self.frame = 0
 		self.images =  spriteImages('alien_sheet.png',(25,24))
 		self.image = self.images[self.frame]
@@ -278,9 +274,7 @@ class Shield(pygame.sprite.DirtySprite):
 		super().__init__()
 		self.health = 5
 		self.images =  spriteImages('shield_sheet.png',(25,25))
-		#self.image = pygame.Surface((25,25))
-		#self.image.fill(color.WHITE)
-
+		
 		if corner != None:
 			self.frame = 5
 			if corner == 'right':
