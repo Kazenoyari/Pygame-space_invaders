@@ -225,6 +225,7 @@ class Alien(pygame.sprite.DirtySprite):
 	# 	locx: x cordinate for the topleft corner
 	# 	locy: y cordinate for the topleft corner
 	# 	sway: amount of pixels the alien moves to the left and the right
+	time_between_moves = 600 #Speed at which the alien moves
 
 
 	def __init__(self, loc=(0,0), sway=0):
@@ -237,7 +238,7 @@ class Alien(pygame.sprite.DirtySprite):
 		self.rect.x = loc[0]
 		self.rect.y = loc[1]
 
-		self.speed = 6
+		self.speed = 6 #Size of the 'steps' the alien takes every time it moves
 		self.health = 1
 		self.pivot = self.rect.centerx #Center of the origin of the aline. Pivot for the swaying movement
 		self.sway = sway
@@ -245,7 +246,7 @@ class Alien(pygame.sprite.DirtySprite):
 
 	def move(self):
 		now = pygame.time.get_ticks()
-		if (now - self.last_move) >= 600:
+		if (now - self.last_move) >= Alien.time_between_moves:
 			self.last_move = pygame.time.get_ticks()
 			self.rect.x = self.rect.x + self.speed
 			if self.rect.left > (self.pivot + self.sway) or self.rect.left < (self.pivot - self.sway):

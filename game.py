@@ -14,8 +14,11 @@ from classes import *
 
 
 def newLevel(level,alien_group,sprite_group):
-	for i in range(1,5):
-		for f in range(1,10):
+	Alien.time_between_moves = Alien.time_between_moves - (level*1.06)
+	level = str(level)[-1:]
+	level = int(level)
+	for i in range(1,5): #Alien rows
+		for f in range(1,10): #Alien columns
 			alien = Alien(loc=(5 + (f*42), (50 * i)+(20 * (level-1))), sway=50)
 			alien_group.add(alien)
 
@@ -126,13 +129,8 @@ def run(screen,clock,size):
 
 			if not alien_group.sprites(): #If there are no more aliens
 				level += 1
-				if level > 10:
-					#If reached level 10, stop the game loop and return 1 (win)
-					loop = False		
-					return score
-				else:
-					newLevel(level, alien_group, all_sprites)
-					levelText.changeText('Level ' + str(level))
+				newLevel(level, alien_group, all_sprites)
+				levelText.changeText('Level ' + str(level))
 
 		if start_pause: #Saves the state of the screen affected by the pause menu before pausing
 			pause_rect = pause_image.get_rect()
