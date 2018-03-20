@@ -14,12 +14,12 @@ from classes import *
 
 
 def newLevel(level,alien_group,sprite_group):
-	Alien.time_between_moves = Alien.time_between_moves - (level*1.06)
+	Alien.time_between_moves = Alien.time_between_moves - (level*1.08)
 	level = str(level)[-1:]
 	level = int(level)
 	for i in range(1,5): #Alien rows
 		for f in range(1,10): #Alien columns
-			alien = Alien(loc=(5 + (f*42), (50 * i)+(20 * (level-1))), sway=50)
+			alien = Alien(loc=(5 + (f*42), (40 * i)+(20 * (level+1))), sway=50)
 			alien_group.add(alien)
 
 	for alien in alien_group:
@@ -49,13 +49,13 @@ def run(screen,clock,size):
 	sfx_group = pygame.sprite.LayeredDirty() #Group for sfx objects
 	all_sprites = pygame.sprite.LayeredDirty() #Group for all objects
 
-	ship = Ship(loc=((settings.size[0] / 2)-50,(settings.size[1] - 150)))
+	ship = Ship(loc=((settings.size[0] / 2)-50,(settings.size[1] - 75)))
 	all_sprites.add(ship)
 
 
-	Shield.createShield(shield_group,loc=(25,(settings.size[1] - 250)))
-	Shield.createShield(shield_group,loc=((settings.size[0] / 2)-75,(settings.size[1] - 250)))
-	Shield.createShield(shield_group,loc=(settings.size[0]-175,(settings.size[1] - 250)))
+	Shield.createShield(shield_group,loc=(25,(settings.size[1] - 180)))
+	Shield.createShield(shield_group,loc=((settings.size[0] / 2)-75,(settings.size[1] - 180)))
+	Shield.createShield(shield_group,loc=(settings.size[0]-175,(settings.size[1] - 180)))
 	for shield in shield_group:
 		all_sprites.add(shield)
 	
